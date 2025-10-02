@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Game - 동굴 탈출</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="start-screen">
+        <h1>직업을 선택하세요</h1>
+        <div id="character-selection">
+            <div class="character-card" data-character="assassin">
+                <img src="assassin.png" alt="암살자">
+                <p>암살자</p>
+            </div>
+            <div class="character-card" data-character="cleric">
+                <img src="cleric.png" alt="성직자">
+                <p>성직자</p>
+            </div>
+            <div class="character-card" data-character="warrior">
+                <img src="warrior.png" alt="전사">
+                <p>전사</p>
+            </div>
+            <div class="character-card" data-character="mage">
+                <img src="mage.png" alt="마법사">
+                <p>마법사</p>
+            </div>
+            <div class="character-card" data-character="idol">
+                <img src="idol.png" alt="아이돌">
+                <p>아이돌</p>
+            </div>
+        </div>
+        <button id="start-button" class="hidden">START</button>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <div id="hearts-container"></div>
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <div id="game-over-screen" class="hidden">
+        <div id="game-over-box">
+            <h1>GAME OVER</h1>
+            <button id="retry-button">RETRY</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

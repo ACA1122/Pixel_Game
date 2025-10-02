@@ -1,0 +1,164 @@
+body {
+    background-color: #1a1a1a;
+    color: white;
+    font-family: 'Malgun Gothic', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+#start-screen h1 {
+    margin-bottom: 40px;
+    font-size: 2.5em;
+}
+
+#character-selection {
+    display: flex;
+    gap: 20px;
+}
+
+.character-card {
+    background-color: #333;
+    border: 2px solid #555;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.character-card:hover {
+    transform: scale(1.05);
+    border-color: #a89ee6;
+}
+
+.character-card.selected {
+    border-color: #ffcc00; /* Gold border for selected */
+    transform: scale(1.1);
+}
+
+#start-button {
+    background-color: #a89ee6;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 40px;
+}
+
+#start-button:hover {
+    background-color: #8e7cc3;
+}
+
+.character-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.character-card p {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-canvas {
+    border: 2px solid #fff;
+    background: url('forest.png') no-repeat center center/cover;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#hearts-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+
+.heart {
+    width: 30px;
+    height: 45px;
+    position: relative;
+    transform: rotate(-45deg);
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+}
+
+.heart::before {
+    top: -15px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 15px;
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+}
+
+#game-over-box {
+    background-color: #222;
+    padding: 40px;
+    border-radius: 15px;
+    border: 3px solid #a89ee6;
+    text-align: center;
+}
+
+#game-over-box h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #ff4444;
+}
+
+#retry-button {
+    background-color: #a89ee6;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#retry-button:hover {
+    background-color: #8e7cc3;
+}
