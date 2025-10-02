@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverScreen = document.getElementById('game-over-screen');
     const retryButton = document.getElementById('retry-button');
     const startButton = document.getElementById('start-button');
+    const bgm = document.getElementById('bgm');
 
     // Game State
     let selectedCharacterName = null;
+    let isMusicPlaying = false;
     const characterImages = {};
     const obstacleImage = new Image();
     const bossImage = new Image();
@@ -154,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             obstacles.push(new Goblin());
         }
-        if (frame > 500 && frame % 300 === 0) { // Wait a bit before spawning items
+        if (frame > 500 && frame % 300 === 0) {
             if (Math.random() < 0.38) { // 38% chance
                 items.push(new Item());
             }
@@ -175,8 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkCollisions() {
         const hitboxPadding = selectedCharacterName === 'idol' ? 15 : 0;
-
-        // Obstacle collision
         if (invincibilityFrames > 0) {
             invincibilityFrames--;
         } else {
@@ -196,8 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
-        // Item collision (no hitbox adjustment for items)
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
             if (player.x < item.x + item.width && player.x + PLAYER_WIDTH > item.x &&
@@ -252,6 +250,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     characterCards.forEach(card => {
         card.addEventListener('click', () => {
+            if (!isMusicPlaying) {
+                bgm.volume = 0.5;
+                bgm.play().catch(e => console.error("BGM play failed:", e));
+                isMusicPlaying = true;
+            }
             characterCards.forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             selectedCharacterName = card.dataset.character;
