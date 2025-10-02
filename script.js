@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedCharacterName = null;
     const characterImages = {};
     const obstacleImage = new Image();
+    const bossImage = new Image();
     let player;
-    let obstacles = [];
-    let monsters = [];
+    let obstacles = []; // This will hold both goblins and bosses
     let frame = 0;
     let gameRunning = false;
     let lives = 3;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Image Loading
     const characters = ['assassin', 'cleric', 'warrior', 'mage', 'idol'];
     let imagesLoaded = 0;
-    const totalImages = characters.length + 1; // +1 for the goblin
+    const totalImages = characters.length + 2; // +2 for goblin and boss
 
     characters.forEach(char => {
         const img = new Image();
@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     obstacleImage.src = 'goblen.png';
     obstacleImage.onload = () => { imagesLoaded++; };
+    bossImage.src = 'boss.png';
+    bossImage.onload = () => { imagesLoaded++; };
 
     // Player Class
     class Player {
@@ -89,19 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         attack() {
-            const attackX = this.x + PLAYER_WIDTH / 2;
-            const attackY = this.y + PLAYER_HEIGHT / 2;
-            const attackRadius = 50;
-
-            ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
-            ctx.beginPath();
-            ctx.arc(attackX, attackY, attackRadius, 0, Math.PI * 2);
-            ctx.fill();
-
-            monsters = monsters.filter(monster => {
-                const distance = Math.sqrt(Math.pow(monster.x - attackX, 2) + Math.pow(monster.y - attackY, 2));
-                return distance > attackRadius;
-            });
+            // Attack logic is not used against obstacles, but kept for potential future use
         }
     }
 
@@ -118,10 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    class Obstacle extends MovingObject {
+    class Goblin extends MovingObject {
         constructor() {
-            const width = 60;
-            const height = 60;
+            const width = 90;
+            const height = 90;
             const y = canvas.height - height;
             super(canvas.width, y, width, height);
         }
@@ -130,10 +120,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    class Boss extends MovingObject {
+        constructor() {
+            const width = 150;
+            const height = 150;
+            const y = canvas.height - height;
+            super(canvas.width, y, width, height);
+        }
+        draw() {
+            ctx.drawImage(bossImage, this.x, this.y, this.width, this.height);
+        }
+    }
+
     // Game Logic
     function handleSpawning() {
-        if (frame % 100 === 0) {
-            obstacles.push(new Obstacle());
+        // Spawn something every 100 frames, but only if there are not too many obstacles on screen
+        if (frame % 100 === 0 && obstacles.length < 5) {
+            if (Math.random() < 0.2) { // 20% chance to spawn a boss
+                obstacles.push(new Boss());
+            } else { // 80% chance to spawn a goblin
+                obstacles.push(new Goblin());
+            }
         }
     }
 
@@ -194,10 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             player.jump();
         }
-        if (e.key === 'a' || e.key === 'A') {
-            e.preventDefault();
-            player.attack();
-        }
     });
 
     retryButton.addEventListener('click', () => {
@@ -207,26 +210,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     characterCards.forEach(card => {
         card.addEventListener('click', () => {
-            // Remove 'selected' from all cards
             characterCards.forEach(c => c.classList.remove('selected'));
-            // Add 'selected' to the clicked card
             card.classList.add('selected');
             selectedCharacterName = card.dataset.character;
-            // Show the start button
             startButton.classList.remove('hidden');
         });
     });
 
     startButton.addEventListener('click', () => {
         if (selectedCharacterName) {
-            if (imagesLoaded === totalImages) {
+            // Wait for all images to load
+            if (imagesLoaded >= totalImages) {
                 startGame(selectedCharacterName);
             } else {
-                // Fallback if images are still loading
                 const interval = setInterval(() => {
-                    if (imagesLoaded === totalImages) {
+                    if (imagesLoaded >= totalImages) {
                         clearInterval(interval);
-                        startGame(selectedCharacterName);
+                        startGame(selectedCharactername);
                     }
                 }, 100);
             }
@@ -258,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedCharacterName = null;
         gameRunning = false;
         obstacles = [];
-        monsters = [];
         frame = 0;
         lives = 3;
         invincibilityFrames = 0;
@@ -281,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         invincibilityFrames = 0;
         frame = 0;
         obstacles = [];
-        monsters = [];
 
         gameRunning = true;
         gameLoop();
